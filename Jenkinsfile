@@ -1,26 +1,20 @@
 pipeline {
     agent any
-     triggers {
-        cron('0 9 * * 1-5')
-        pollSCM('H/5 * * * *')
-    }
+
     stages {
-        stage('Build') {
+        stage('Checkout Code') {
             steps {
-                echo 'Building...'
-                // Your build commands here
+                git 'https://github.com/YourRepo/website.git'
             }
         }
-        stage('Test') {
+
+        stage('Deploy HTML') {
             steps {
-                echo 'Testing...'
-                // Your test commands here
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying...'
-                // Your deployment commands here
+                script {
+                    def webDir = 'C:\\xampp\\htdocs\\'
+                    bat "copy index.html ${webDir}"
+                    echo "HTML file deployed to web server!"
+                }
             }
         }
     }
